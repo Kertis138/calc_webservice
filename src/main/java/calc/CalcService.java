@@ -1,10 +1,7 @@
 package calc;
 
 import javax.inject.Singleton;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -16,31 +13,41 @@ public class CalcService {
     private CalcCache calcCache= new CalcCache(100);
 
     private enum Operation {
-        add, subtract, multiply, divide
+        add,
+        subtract,
+        multiply,
+        divide
+    }
+
+    private float operationFunc(Operation op, float a, float b) {
+        switch (op) {
+            case add:
+                return a+b;
+            case subtract:
+                return a-b;
+            case multiply:
+                return a*b;
+            case divide:
+                return a/b;
+        }
+        return 0;
+    }
+
+    private float calcFunc(Operation op, Float ...vals) {
+        float result = vals[0];
+        for (int i = 1; i<vals.length; ++i)
+            result = operationFunc(op, result, vals[i]);
+        return result;
     }
 
     private String calc(Operation op, String path, Float... vals) {
         String output = calcCache.getCache(path);
         if (output == null) {
-            switch (op) {
-                case add:
-                    output = Float.toString(vals[0] + vals[1] + vals[2]);
-                    break;
-                case subtract:
-                    output = Float.toString(vals[0] - vals[1] - vals[2]);
-                    break;
-                case multiply:
-                    output = Float.toString(vals[0] * vals[1] * vals[2]);
-                    break;
-                case divide:
-                    output = vals[1] == 0 ? "Divide by zero" :
-                                            Float.toString(vals[0] / vals[1]);
-            }
+            output = Float.toString(calcFunc(op, vals));
             calcCache.cache(path, output);
         }
         return output;
     }
-
 
     @GET
     @Path("/add/{a}/{b}/{c}")
