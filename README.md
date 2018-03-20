@@ -10,3 +10,11 @@ cd calc_webservice
 mvn package
 mvn exec:java
 ```
+### Examples
+
+```
+http://localhost:8080/add/1/1/1
+http://localhost:8080/divide/1/1
+http://localhost:8080/subtract/1/1/1
+http://localhost:8080/multiply/1/1/1
+```
