@@ -3,7 +3,6 @@ Java Jersey. Caclulator Web Service Example
 
 ### Test
 Make sure the variable JAVA_HOME is set to jdk8
-Port: 8080
 
 ```
 git clone https://github.com/Kertis138/calc_webservice.git
